@@ -4,6 +4,11 @@ import tweepy, time, sys
 from custompackages import jsonloader
 
 def tweetBot():
+	#WARNING: Make sure you change the file name here to the correct one
+	#Should I make this a commandline argument? 
+	#Yes
+	#Am I going to do it?
+	#Look man I just work here
 	j = jsonloader.loadJson("data/auth.json")
 	d = j["auth"]
 	data = j["files"]
@@ -27,6 +32,7 @@ def tweetBot():
 				if(not censored(censor, message['message'].lower())):
 					api.update_status(message['message'])
 					print("Tweeted")
+					#NOTE: Change time.sleep() to your liking for how often it should tweet
 					time.sleep(1800)
 			except:
 				continue
