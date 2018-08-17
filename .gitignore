@@ -3,3 +3,4 @@ testingTweetbot.py
 data/4AM.json
 data/badwords.txt
 data/auth.txt
+data/auth.json
