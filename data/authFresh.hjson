@@ -1,0 +1,27 @@
+{
+	
+	"auth" : {
+		#These are gotten from Twitter's app settings
+		"com_key"		:	""
+		"com_secret"	:	""
+		
+		#These are from facebook itself
+		"access_key"	:	""
+		"access_secret"	:	""
+		"app_id"		:	""
+		"app_secret"	:	""
+		
+		#Page ID of the page to be crawled
+		"page_id"		:	""
+
+		#access token from facebook gotten via GRAPH
+		"access_token"	:	""
+	}
+
+	"files" : {
+		#optional censor
+		"censor" : ""
+		#where you're storing posts to be tweeted
+		"tweets" : ""
+	}
+}

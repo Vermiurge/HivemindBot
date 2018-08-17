@@ -4,7 +4,7 @@ import requests, urllib, warnings, json
 from custompackages import jsonloader
 
 def main():
-	
+	#WARNING: Change this to the correct file path before running
 	d = jsonloader.loadJson("data/auth.json")
 	
 	assert(d), "File does not exist."

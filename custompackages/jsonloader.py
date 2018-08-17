@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import json
+import json, hjson
 
 def loadJson(filename, encoding='utf-8'):
 	#returns a json file as a python object
@@ -10,10 +10,13 @@ def loadJson(filename, encoding='utf-8'):
 		f.close()
 	except FileNotFoundError:
 		return
-	return json.loads(data)
+	return hjson.loads(data)
 
 def prettyPrint(filename, encoding='utf-8'):
 	pretty = loadJson(filename)
 	with open(filename, 'w+', encoding=encoding) as f:
 		f.write(json.dumps(pretty, indent=True))
 	f.close()
+
+#TODO: write hjson specific loader
+#the basic one works for now but not for long
