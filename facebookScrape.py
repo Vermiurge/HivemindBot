@@ -29,7 +29,7 @@ def main():
 	reply = requests.get(url_complete)
 
 	if reply.status_code > 399:
-		"Response: " + str(reply.status_code)
+		print("Response: " + str(reply.status_code))
 		return
 
 	#200 status code doesn't mean a proper response
