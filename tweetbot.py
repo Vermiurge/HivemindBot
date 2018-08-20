@@ -11,6 +11,8 @@ def tweetBot(authfile=None, tweetDelay):
 
 	censor = data["censor"]
 	censorBypass = False
+	if censor = "":
+		censorBypass = True
 
 	COM_KEY = d["com_key"]
 	COM_SECRET = d["com_secret"]
