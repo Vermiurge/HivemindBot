@@ -60,3 +60,5 @@ if __name__ == '__main__':
 		tweetBot(sys.argv[1], 1800)
 	else:
 		tweetBot("data/auth.json", 1800)
+
+	exit()

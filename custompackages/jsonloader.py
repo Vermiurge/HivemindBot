@@ -8,8 +8,9 @@ def loadJson(filename, encoding='utf-8'):
 		with open(filename, "r", encoding=encoding) as f:
 			data = f.read()
 		f.close()
-	except FileNotFoundError:
-		return
+	except FileNotFoundError as e:
+		print(e)
+		return None
 	return json.loads(data)
 
 def loadHjson(filename, encoding='utf-8'):
@@ -18,8 +19,9 @@ def loadHjson(filename, encoding='utf-8'):
 		with open(filename, "r", encoding=encoding) as f:
 			data = f.read()
 		f.close()
-	except FileNotFoundError:
-		return
+	except FileNotFoundError as e:
+		print(e)
+		return None
 	return hjson.loads(data)
 
 def prettyPrint(filename, encoding='utf-8'):
@@ -27,6 +29,3 @@ def prettyPrint(filename, encoding='utf-8'):
 	with open(filename, 'w+', encoding=encoding) as f:
 		f.write(json.dumps(pretty, indent=True))
 	f.close()
-
-#TODO: write hjson specific loader
-#the basic one works for now but not for long

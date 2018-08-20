@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 
-import requests, urllib, warnings, json, sys
+import requests, json, sys
 from custompackages import jsonloader
 
 def main(authfile=None):
 	d = jsonloader.loadHjson(authfile)
 	
-	assert(d), "File does not exist."
-
+	if d == None:
+		print(authfile, ": file not found")
+		return
+	
 	auth = d['auth']
-	files = d['files']
+	files =  d['files']
 
 	#TODO: These do nothing. Remove?
 	#APP_ID 		=	auth['app_id']
@@ -20,6 +22,7 @@ def main(authfile=None):
 	access_token	=	auth['access_token']
 	
 	file = files['tweets']
+	
 	url_complete = "https://graph.facebook.com/v3.0/" + page_id + "/posts?access_token=" + access_token
 	
 	#prints the full URL for your convenience in the console if you want to follow or confirm the GRAPH response yourself
@@ -76,5 +79,7 @@ if __name__ == '__main__':
 	#WARNING: Change this to the correct file path before running
 	if sys.argv[1]:
 		main(sys.argv[1])
-	else:	
+	else:
 		main("data/auth.hjson")
+
+	exit()
