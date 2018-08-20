@@ -3,13 +3,8 @@
 import tweepy, time, sys
 from custompackages import jsonloader
 
-def tweetBot():
-	#WARNING: Make sure you change the file name here to the correct one
-	#Should I make this a commandline argument? 
-	#Yes
-	#Am I going to do it?
-	#Look man I just work here
-	j = jsonloader.loadJson("data/auth.json")
+def tweetBot(authfile=None):
+	j = jsonloader.loadJson(authfile)
 	d = j["auth"]
 	data = j["files"]
 	tweets = jsonloader.loadJson(data["tweets"])
@@ -48,4 +43,10 @@ def censored(file, string):
 	return False
 
 if __name__ == '__main__':
-	tweetBot()
+	#WARNING: Make sure you change the file name here to the correct one
+	#There's your goddamn commandline argument
+	#look it even has a default
+	if sys.argv[1]:
+		tweetBot(sys.argv[1])
+	else:
+		tweetBot("data/auth.json")

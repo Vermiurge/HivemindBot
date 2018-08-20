@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
-import requests, urllib, warnings, json
+import requests, urllib, warnings, json, sys
 from custompackages import jsonloader
 
-def main():
-	#WARNING: Change this to the correct file path before running
-	d = jsonloader.loadHjson("data/auth.hjson")
+def main(authfile=None):
+	d = jsonloader.loadHjson(authfile)
 	
 	assert(d), "File does not exist."
 
@@ -74,5 +73,8 @@ def writeResponseToFile(file, key, url, **kwargs):
 	jsonloader.prettyPrint(file)
 
 if __name__ == '__main__':
-	main()
-
+	#WARNING: Change this to the correct file path before running
+	if sys.argv[1]:
+		main(sys.argv[1])
+	else:	
+		main("data/auth.hjson")
