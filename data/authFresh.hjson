@@ -4,10 +4,10 @@
 		#These are gotten from Twitter's app settings
 		"com_key"		:	""
 		"com_secret"	:	""
-		
-		#These are from facebook itself
 		"access_key"	:	""
 		"access_secret"	:	""
+		
+		#These are from facebook itself
 		"app_id"		:	""
 		"app_secret"	:	""
 		
@@ -15,6 +15,8 @@
 		"page_id"		:	""
 
 		#access token from facebook gotten via GRAPH
+		#the only way to automate this is building an actual loginflow from my hamscraps
+		#so get it yourself
 		"access_token"	:	""
 	}
 
