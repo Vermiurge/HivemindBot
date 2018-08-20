@@ -1,5 +1,5 @@
 {
-	
+	#Blank Auth file with cues for all the data you'll need
 	"auth" : {
 		#These are gotten from Twitter's app settings
 		"com_key"		:	""

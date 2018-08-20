@@ -5,7 +5,7 @@ from custompackages import jsonloader
 
 def main():
 	#WARNING: Change this to the correct file path before running
-	d = jsonloader.loadJson("data/auth.json")
+	d = jsonloader.loadHjson("data/auth.hjson")
 	
 	assert(d), "File does not exist."
 
@@ -23,6 +23,7 @@ def main():
 	file = files['tweets']
 	url_complete = "https://graph.facebook.com/v3.0/" + page_id + "/posts?access_token=" + access_token
 	
+	#prints the full URL for your convenience in the console if you want to follow or confirm the GRAPH response yourself
 	print(url_complete)
 
 	#TODO: we get one more response than we fully use, debating on moving these checks into WriteResponseToFile
@@ -45,10 +46,11 @@ def main():
 def writeResponseToFile(file, key, url, **kwargs):
 	with open(file, 'w+', encoding='utf-8') as f:
 		f.write("{\n\t\"" + key +"\": [\n")
+		
 		while  url != "":
 			reply = requests.get(url)
 			json_string = reply.json()
-
+			
 			i = 0
 			for message in json_string[key]:
 				i += 1
@@ -68,6 +70,7 @@ def writeResponseToFile(file, key, url, **kwargs):
 
 		f.write("]\n\t}")
 	f.close()
+	print("Done")
 	jsonloader.prettyPrint(file)
 
 if __name__ == '__main__':

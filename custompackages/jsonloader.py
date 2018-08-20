@@ -10,6 +10,16 @@ def loadJson(filename, encoding='utf-8'):
 		f.close()
 	except FileNotFoundError:
 		return
+	return json.loads(data)
+
+def loadHjson(filename, encoding='utf-8'):
+	#returns a hjson file as a python object
+	try:
+		with open(filename, "r", encoding=encoding) as f:
+			data = f.read()
+		f.close()
+	except FileNotFoundError:
+		return
 	return hjson.loads(data)
 
 def prettyPrint(filename, encoding='utf-8'):
