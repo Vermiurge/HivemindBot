@@ -6,22 +6,22 @@ from custompackages import jsonloader, logging
 def tweetBot(tweetDelay, authfile=None):
 	j = jsonloader.loadHjson(authfile)
 	
-	log = logging.logging()
-	print(log.getLog())
+	
+	print(record.getLog())
 
 	try:
 		d = j["auth"]
 		data = j["files"]
 	except:
-		print("Data not found")
-		quit()
+		record.log("Data not found")
 	
 	tweets = jsonloader.loadJson(data["tweets"])
 	censor = data["censor"]	
 	censorBypass = False
+	
 	if censor == "":
 		censorBypass = True
-
+	
 	COM_KEY = d["com_key"]
 	COM_SECRET = d["com_secret"]
 	ACCESS_KEY = d["access_key"]
@@ -43,19 +43,20 @@ def tweetBot(tweetDelay, authfile=None):
 				if censorBypass:
 					#tweet(api, message['message'], tweetDelay)
 					#print(message['message'], "\n######")
-					log.add(message['message'])
+					record.add(message['message'])
 					continue
 				if(not censored(censor, message['message'].lower())):
 					#tweet(api, message['message'], tweetDelay)
 					#print(message['message'], "\n######")
-					log.add(message['message'])
+					record.add(message['message'])
 					pass
-			except:
+			except BaseException as e:
+				record.add(e)
 				continue
 	f.close()
 
 	#TODO: implement a more complete logging flow and write results to file
-	for item in log.getLog():
+	for item in record.getLog():
 		print(item)
 
 def censored(pfile, pstring):
@@ -75,9 +76,13 @@ if __name__ == '__main__':
 	#WARNING: Make sure you change the file name here to the correct one
 	#Set the time delay between tweets in seconds
 	#I defaulted it to every half hour, 60 X 60 / 2
+	record = logging.log()
+	defaultPath = "data/auth.hjson"
 	try:
-		tweetBot(1800, sys.argv[1], )
+		tweetBot(1800, sys.argv[1])
+		record.add(sys.argv[1], " opened")
 	except:
-		tweetBot(1800, "data/auth.hjson")
+		tweetBot(1800, defaultPath)
+		record.add(defaultPath, " opened")
 
 	exit()

@@ -2,29 +2,41 @@
 
 import time
 
-class logitem():
+class logEntry:
 	time  = ""
 	message = ""
-	censored = None
-	def __init__(self, pMessage, pTime = None, pCensor = false):
+	timeFormat = "%H:%M:%S"
+	def __init__(self, pMessage, pTime = None):
 		if pTime:
 			self.time = pTime
 		else:
-			self.time = time.strftime("%H:%M:%S %a %d-%m-%y", time.localtime())
+			self.time = time.strftime(self.timeFormat, time.localtime())
 		self.message = pMessage
+	def __repr__(self):
+		return str(self.time) + " : " + str(self.message)
+
+class logEntryPost(logEntry):
+	censored = None
+	logEntry.timeFormat = "%H:%M:%S %a %d-%m-%y"
+	def __init__(self, pMessage, pTime = None, pCensor = False):
+		logEntry.__init__(pMessage, pTime)
 		self.censored = pCensor
 	def __repr__(self):
-		return str(self.time) + " : " + str(self.message) 
+		return logEntry.__repr__() + " | Censored = " + str(pCensor)
 
 
-class log():
+
+
+class log:
 	logstack = []
 	def __init__(self):
-		self.logstack.append(logitem("Start", 1))
+		self.logstack.append(logEntry("Start", 1))
 
 	def getLog(self):
 		return self.logstack
 
-	def add(self, pMessage, pTime = None):
-		self.logstack.append(logitem(pMessage, pTime))
-
+	def add(self, pMessage, pTime = None, pCensor = None):
+		if pCensor != None:
+			self.logstack.append(logEntryPost(pMessage, pTime, pCensor))
+		else:
+			self.logstack.append(logEntry(pMessage, pTime))
