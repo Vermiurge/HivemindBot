@@ -53,7 +53,8 @@ def tweetBot(tweetDelay, authfile=None):
 			except:
 				continue
 	f.close()
-	
+
+	#TODO: implement a more complete logging flow and write results to file
 	for item in log.getLog():
 		print(item)
 

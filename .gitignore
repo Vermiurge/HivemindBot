@@ -1,5 +1,6 @@
 fulltestenvironment.py
 testingTweetbot.py
+setup.bat
 data/4AM.json
 data/badwords.txt
 data/auth.json

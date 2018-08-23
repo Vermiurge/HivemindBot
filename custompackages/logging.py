@@ -5,17 +5,19 @@ import time
 class logitem():
 	time  = ""
 	message = ""
-	def __init__(self, pMessage, pTime = None):
+	censored = None
+	def __init__(self, pMessage, pTime = None, pCensor = false):
 		if pTime:
 			self.time = pTime
 		else:
 			self.time = time.strftime("%H:%M:%S %a %d-%m-%y", time.localtime())
 		self.message = pMessage
+		self.censored = pCensor
 	def __repr__(self):
 		return str(self.time) + " : " + str(self.message) 
 
 
-class logging():
+class log():
 	logstack = []
 	def __init__(self):
 		self.logstack.append(logitem("Start", 1))
@@ -25,3 +27,4 @@ class logging():
 
 	def add(self, pMessage, pTime = None):
 		self.logstack.append(logitem(pMessage, pTime))
+
