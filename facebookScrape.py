@@ -9,9 +9,12 @@ def main(authfile=None):
 	if d == None:
 		print(authfile, ": file not found")
 		return
-	
-	auth = d['auth']
-	files =  d['files']
+	try:
+		auth = d['auth']
+		files =  d['files']
+	except:
+		print("Data not found")
+		quit()
 
 	#TODO: These do nothing. Remove?
 	#APP_ID 		=	auth['app_id']
@@ -77,9 +80,9 @@ def writeResponseToFile(file, key, url, **kwargs):
 
 if __name__ == '__main__':
 	#WARNING: Change this to the correct file path before running
-	if sys.argv[1]:
+	try:
 		main(sys.argv[1])
-	else:
+	except:
 		main("data/auth.hjson")
 
 	exit()

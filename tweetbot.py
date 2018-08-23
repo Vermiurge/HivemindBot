@@ -4,12 +4,17 @@ import tweepy, time, sys
 from custompackages import jsonloader
 
 def tweetBot(authfile=None, tweetDelay):
-	j = jsonloader.loadJson(authfile)
-	d = j["auth"]
-	data = j["files"]
+	j = jsonloader.loadHjson(authfile)
+	
+	try:
+		d = j["auth"]
+		data = j["files"]
+	except:
+		print("Data not found")
+		quit()
+	
 	tweets = jsonloader.loadJson(data["tweets"])
-
-	censor = data["censor"]
+	censor = data["censor"]	
 	censorBypass = False
 	if censor = "":
 		censorBypass = True
@@ -58,9 +63,9 @@ if __name__ == '__main__':
 	#WARNING: Make sure you change the file name here to the correct one
 	#Set the time delay between tweets in seconds
 	#I defaulted it to every half hour, 60 X 60 / 2
-	if sys.argv[1]:
+	try:
 		tweetBot(sys.argv[1], 1800)
-	else:
-		tweetBot("data/auth.json", 1800)
+	except:
+		tweetBot("data/auth.hjson", 1800)
 
 	exit()
