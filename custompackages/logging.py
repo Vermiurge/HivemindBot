@@ -24,9 +24,6 @@ class logEntryPost(logEntry):
 	def __repr__(self):
 		return logEntry.__repr__() + " | Censored = " + str(pCensor)
 
-
-
-
 class log:
 	logstack = []
 	def __init__(self):
