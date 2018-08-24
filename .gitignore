@@ -6,3 +6,5 @@ data/badwords.txt
 data/auth.json
 
 data/auth.hjson
+
+data/log.txt

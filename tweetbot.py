@@ -3,17 +3,15 @@
 import tweepy, time, sys
 from custompackages import jsonloader, logging
 
-def tweetBot(tweetDelay, authfile=None):
+def tweetBot(tweetDelay, authfile=None, autolog = True):
 	j = jsonloader.loadHjson(authfile)
-	
-	
-	print(record.getLog())
 
 	try:
 		d = j["auth"]
 		data = j["files"]
 	except:
-		record.log("Data not found")
+		record.add("Data not found")
+		return
 	
 	tweets = jsonloader.loadJson(data["tweets"])
 	censor = data["censor"]	
@@ -39,25 +37,29 @@ def tweetBot(tweetDelay, authfile=None):
 		#assuming bottom is earliest posts going to most recent at top
 		for message in reversed(tweets['data']):
 			try:
-				#These prints are more for debug than anything
+				#tweets everything if censorBypass isn't false
 				if censorBypass:
 					#tweet(api, message['message'], tweetDelay)
 					#print(message['message'], "\n######")
-					record.add(message['message'])
+					record.add(message['message'], autolog, false)
 					continue
-				if(not censored(censor, message['message'].lower())):
+				#tweets only those not caught by the censor
+				censorTweet = censored(censor, message['message'].lower())
+				if not censorTweet:
 					#tweet(api, message['message'], tweetDelay)
 					#print(message['message'], "\n######")
-					record.add(message['message'])
 					pass
+				record.add(message['message'], autolog, censorTweet)
 			except BaseException as e:
 				record.add(e)
-				continue
+				break
 	f.close()
 
-	#TODO: implement a more complete logging flow and write results to file
-	for item in record.getLog():
-		print(item)
+	#TODO:Find a way to move this out of tweetbot()
+	with open(data["logging"], "w+", encoding='utf-8') as f:
+		for item in record.getLog():
+			f.write(str(item) + '\n')
+		f.close()
 
 def censored(pfile, pstring):
 	with open(pfile, 'r') as f:
@@ -79,10 +81,10 @@ if __name__ == '__main__':
 	record = logging.log()
 	defaultPath = "data/auth.hjson"
 	try:
-		tweetBot(1800, sys.argv[1])
+		tweetBot(1800, sys.argv[1], True)
 		record.add(sys.argv[1], " opened")
-	except:
-		tweetBot(1800, defaultPath)
+	except IndexError:
+		tweetBot(1800, defaultPath, True)
 		record.add(defaultPath, " opened")
 
 	exit()
