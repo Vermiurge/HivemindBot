@@ -50,9 +50,9 @@ def tweetBot(tweetDelay, authfile=None, autolog = True):
 					#print(message['message'], "\n######")
 					pass
 				record.add(message['message'], autolog, censorTweet)
-			except BaseException as e:
-				record.add(e)
-				break
+			except KeyError as e:
+				record.add("KeyError: entry missing "+ str(e))
+				continue
 	f.close()
 
 	for item in record.getLog():
