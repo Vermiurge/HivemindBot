@@ -8,9 +8,9 @@ class logBaseEntry:
 	def __str__(self):
 		return str(self.message)
 	def __repr__(self):
-		return "logBaseEntry(pMessage = \"%s\")" % self.message
+		return "logBaseEntry(\"%s\")" % self.message
 
-class logEntry(logBaseEntry):
+class logEntryTimestamped(logBaseEntry):
 	timeFormat = "%H:%M:%S"
 	def __init__(self, pMessage, pTime = None):
 		super().__init__(pMessage)
@@ -21,14 +21,19 @@ class logEntry(logBaseEntry):
 		if self.logtime != None:
 			prefix = "[" + str(self.logtime) + "]: " 
 		return str(prefix + super().__str__())
+
+	def __repr__(self):
+		return "logEntryTimestamped(\"%s\", %s)" % (self.message, self.logtime)
 	
-class logEntryPost(logEntry):
-	logEntry.timeFormat = "%H:%M:%S %a %d-%m-%y"
+class logEntryPost(logEntryTimestamped):
+	logEntryTimestamped.timeFormat = "%H:%M:%S %a %d-%m-%y"
 	def __init__(self, pMessage, pTime = None, pCensor = False):
 		super().__init__(pMessage, pTime)
 		self.censored = pCensor
 	def __str__(self):
 		return super().__str__() + " | Censored = " + str(self.censored)
+	def __repr__(self):
+		return "logEntryPost(\"%s\", %s, %s)" % (self.message, self.logtime, self.censored)
 	
 class log:
 	def __init__(self):
@@ -43,7 +48,7 @@ class log:
 			self.logstack.append(logEntryPost(pMessage, pTime, pCensor))
 			return
 		elif pTime != None:
-			self.logstack.append(logEntry(pMessage, pTime))
+			self.logstack.append(logEntryTimestamped(pMessage, pTime))
 			return
 		else:
 			self.logstack.append(logBaseEntry(pMessage))

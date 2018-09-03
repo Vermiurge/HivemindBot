@@ -31,7 +31,7 @@ def tweetBot(tweetDelay, authfile=None, autolog = True):
 
 	print("OAuthed")
 
-	#I really suggest not changing the encoding especially if emojis are to be expected from the source
+	#I really suggest not changing the encoding especially if nonASCII characters are to be expected from the source
 	with open(data["tweets"], 'r', encoding='utf-8') as f:
 		#starts tweeting from the bottom of the json file
 		#assuming bottom is earliest posts going to most recent at top
@@ -55,11 +55,15 @@ def tweetBot(tweetDelay, authfile=None, autolog = True):
 				break
 	f.close()
 
+	for item in record.getLog():
+		print(repr(item))
+
 	#TODO:Find a way to move this out of tweetbot()
 	with open(data["logging"], "w+", encoding='utf-8') as f:
 		for item in record.getLog():
 			f.write(str(item) + '\n')
 		f.close()
+	
 
 def censored(pfile, pstring):
 	with open(pfile, 'r') as f:
