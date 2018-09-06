@@ -3,12 +3,10 @@
 import tweepy, time, sys
 from custompackages import jsonloader, logging
 
-def tweetBot(tweetDelay, authfile=None, autolog = True):
-	j = jsonloader.loadHjson(authfile)
-
+def tweetBot(tweetDelay, jsonContents, autolog = True):
 	try:
-		d = j["auth"]
-		data = j["files"]
+		d = jsonContents["auth"]
+		data = jsonContents["files"]
 	except:
 		record.add("Data not found")
 		return
@@ -37,6 +35,7 @@ def tweetBot(tweetDelay, authfile=None, autolog = True):
 		#assuming bottom is earliest posts going to most recent at top
 		for message in reversed(tweets['data']):
 			try:
+				#TODO: Respect the 240 character limit
 				#tweets everything if censorBypass isn't false
 				if censorBypass:
 					#tweet(api, message['message'], tweetDelay)
@@ -56,14 +55,8 @@ def tweetBot(tweetDelay, authfile=None, autolog = True):
 	f.close()
 
 	for item in record.getLog():
-		print(repr(item))
+		print(str(item))
 
-	#TODO:Find a way to move this out of tweetbot()
-	with open(data["logging"], "w+", encoding='utf-8') as f:
-		for item in record.getLog():
-			f.write(str(item) + '\n')
-		f.close()
-	
 
 def censored(pfile, pstring):
 	with open(pfile, 'r') as f:
@@ -85,10 +78,20 @@ if __name__ == '__main__':
 	record = logging.log()
 	defaultPath = "data/auth.hjson"
 	try:
-		tweetBot(1800, sys.argv[1], True)
-		record.add(sys.argv[1], " opened")
-	except IndexError:
-		tweetBot(1800, defaultPath, True)
-		record.add(defaultPath, " opened")
+		j = jsonloader.loadHjson(sys.argv[1])
+		record.add(str(sys.argv[1]) + " opened")
+	except IndexError as e:
+		j = jsonloader.loadHjson(defaultPath)
+		record.add(defaultPath + " opened")
+
+	tweetBot(1800, j, True)	
+
+	#Should I function this out? ¯\_(ツ)_/¯
+	with open(j["files"]["logging"], "w+", encoding='utf-8') as f:
+		f.write(str(record.getLog()[0]) + "\n")
+		for item in record.getLog()[1:]:
+			f.write("\t" + str(item) + '\n')
+		f.write("Logging Closed")
+		f.close()
 
 	exit()

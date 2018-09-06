@@ -14,7 +14,11 @@ class logEntryTimestamped(logBaseEntry):
 	timeFormat = "%H:%M:%S"
 	def __init__(self, pMessage, pTime = None):
 		super().__init__(pMessage)
-		self.logtime = time.strftime(self.timeFormat, time.localtime())
+		#To check for the autologging flag
+		if pTime ==  True:
+			self.logtime = time.strftime(self.timeFormat, time.localtime())
+		else:
+			self.logtime = pTime
 	
 	def __str__(self):
 		prefix = ""
