@@ -55,13 +55,15 @@ def writeResponseToFile(file, key, url, **kwargs):
 			i = 0
 			for message in json_string[key]:
 				i += 1
-				
-				f.write(json.dumps(message, indent=True, ensure_ascii=False) + 
-					(",", "")[i==len(json_string[key]) and kwargs['value'] not in json_string[kwargs['key2']]]
-					#quick list that checks if this message is infact the last possible entry, therefore omits the comma
-					#TODO: This bit of code here basically makes it not usable with anything but facebook GRAPH jsons
-					#a bit more generic but still makes the assumption that there's going to be a second set of keys and values to check against
-				)
+				try:
+					f.write(json.dumps(message, indent=True, ensure_ascii=False) + 
+						(",", "")[i==len(json_string[key]) and kwargs['value'] not in json_string[kwargs['key2']]]
+						#quick list that checks if this message is infact the last possible entry, therefore omits the comma
+						#TODO: This bit of code here basically makes it not usable with anything but facebook GRAPH jsons
+						#a bit more generic but still makes the assumption that there's going to be a second set of keys and values to check against
+					)
+				except KeyError as e:
+					record.add(str(e))
 
 			#iterate through the GRAPH response chain
 			try:

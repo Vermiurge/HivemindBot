@@ -37,18 +37,24 @@ def tweetBot(tweetDelay, jsonContents, autolog = True):
 			try:
 				#TODO: Respect the 240 character limit
 				#tweets everything if censorBypass isn't false
+				message = message['message']
+				length = len(message)
 				if censorBypass:
-					#tweet(api, message['message'], tweetDelay)
-					#print(message['message'], "\n######")
-					record.add(message['message'], autolog, false)
+					#280 character limit is pretty hardlocked for now, that's why I'm comfortable leaving this as a magic number
+					if length > 280:
+						#tweet(api, message, tweetDelay)
+						#print(message, "\n######")
+						pass
+					record.add(message, len(message),autolog, false)
 					continue
 				#tweets only those not caught by the censor
-				censorTweet = censored(censor, message['message'].lower())
+				censorTweet = censored(censor, message.lower())
 				if not censorTweet:
-					#tweet(api, message['message'], tweetDelay)
-					#print(message['message'], "\n######")
-					pass
-				record.add(message['message'], autolog, censorTweet)
+					if length > 280:
+						#tweet(api, message, tweetDelay)
+						#print(message, "\n######")
+						pass
+				record.add(message, len(message), autolog, censorTweet)
 			except KeyError as e:
 				record.add("KeyError: entry missing "+ str(e))
 				continue
