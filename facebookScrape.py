@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import requests, json, sys
+import requests, json, sys, urllib
 from custompackages import jsonloader, logging
 
 def facebookScrape(jsonContents):
@@ -18,6 +18,7 @@ def facebookScrape(jsonContents):
 
 	#These pull the Page id/Access Token to assemble the full Facebook Graph URL
 	page_id			=	auth['page_id']
+	#access_token	=	getToken(APP_ID, APP_SECRET)
 	access_token	=	auth['access_token']
 	
 	file = files['tweets']
@@ -25,6 +26,7 @@ def facebookScrape(jsonContents):
 	url_complete = "https://graph.facebook.com/v3.0/" + page_id + "/posts?access_token=" + access_token
 
 	#prints the full URL for your convenience in the console if you want to follow or confirm the GRAPH response yourself
+	print(url_complete)
 	record.add(url_complete)
 
 	#TODO: we get one more response than we fully use, debating on moving these checks into WriteResponseToFile
@@ -42,7 +44,16 @@ def facebookScrape(jsonContents):
 	#if its gotten this far, we can assume its a proper page json
 	writeResponseToFile(file=file, key="data",url=url_complete, key2="paging", value="next")
 
-
+def getToken(pAppID, pAppSecret):
+  response = urllib.request.urlopen('https://graph.facebook.com/oauth/access_token?client_id=' +
+    pAppID + '&client_secret=' + pAppSecret +
+    '&grant_type=client_credentials')
+  
+  if response.getcode() == 200:
+  	response = json.loads(response.read().decode('utf-8'))
+  	return response["access_token"]
+  else:
+  	return None
 
 def writeResponseToFile(file, key, url, **kwargs):
 	with open(file, 'w+', encoding='utf-8') as f:

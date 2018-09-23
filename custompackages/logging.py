@@ -19,13 +19,11 @@ class logEntryTimestamped(logBaseEntry):
 			self.logtime = time.strftime(self.timeFormat, time.localtime())
 		else:
 			self.logtime = pTime
-	
 	def __str__(self):
 		prefix = ""
 		if self.logtime != None:
 			prefix = "[" + str(self.logtime) + "]: " 
 		return str(prefix + super().__str__())
-
 	def __repr__(self):
 		return "logEntryTimestamped(\"%s\", %s)" % (self.message, self.logtime)
 	
@@ -45,10 +43,8 @@ class log:
 	def __init__(self):
 		self.logstack = []
 		self.logstack.append(logBaseEntry("-------Logging Started-------"))
-
 	def getLog(self):
 		return self.logstack
-
 	def add(self, pMessage, pCharacters =  None, pTime = None, pCensor = None):
 		if pCensor != None:
 			self.logstack.append(logEntryPost(pMessage, pCharacters,pTime, pCensor))

@@ -30,29 +30,29 @@ def tweetBot(tweetDelay, jsonContents, autolog = True):
 	print("OAuthed")
 
 	#I really suggest not changing the encoding especially if nonASCII characters are to be expected from the source
+	#This is facebook so highly likely
 	with open(data["tweets"], 'r', encoding='utf-8') as f:
 		#starts tweeting from the bottom of the json file
 		#assuming bottom is earliest posts going to most recent at top
 		for message in reversed(tweets['data']):
 			try:
-				#TODO: Respect the 240 character limit
 				#tweets everything if censorBypass isn't false
 				message = message['message']
 				length = len(message)
 				if censorBypass:
 					#280 character limit is pretty hardlocked for now, that's why I'm comfortable leaving this as a magic number
-					if length > 280:
+					if length <= 280:
 						#tweet(api, message, tweetDelay)
-						#print(message, "\n######")
+						print(message, "\n######")
 						pass
 					record.add(message, len(message),autolog, false)
 					continue
 				#tweets only those not caught by the censor
 				censorTweet = censored(censor, message.lower())
 				if not censorTweet:
-					if length > 280:
+					if length <= 280:
 						#tweet(api, message, tweetDelay)
-						#print(message, "\n######")
+						print(message, "\n######")
 						pass
 				record.add(message, len(message), autolog, censorTweet)
 			except KeyError as e:
@@ -61,7 +61,8 @@ def tweetBot(tweetDelay, jsonContents, autolog = True):
 	f.close()
 
 	for item in record.getLog():
-		print(str(item))
+		#print(str(item))
+		pass
 
 
 def censored(pfile, pstring):
