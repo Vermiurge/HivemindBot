@@ -11,4 +11,3 @@ data/facebooklog.txt
 .vscode/settings.json
 custompackages/logging.pyc
 custompackages/jsonloader.pyc
-custompackages/__pycache__
