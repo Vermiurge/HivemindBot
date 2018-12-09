@@ -1,69 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import tweepy, time, sys
-from custompackages import jsonloader, logging
+from custompackages import jsonloader, botClass, logging
 
-def tweetBot(tweetDelay, jsonContents, autolog = True):
-	try:
-		d = jsonContents["auth"]
-		data = jsonContents["files"]
-	except:
-		record.add("Data not found")
-		return
-	
-	tweets = jsonloader.loadJson(data["tweets"])
-	censor = data["censor"]	
-	censorBypass = False
-	
-	if censor == "":
-		censorBypass = True
-	
-	COM_KEY = d["com_key"]
-	COM_SECRET = d["com_secret"]
-	ACCESS_KEY = d["access_key"]
-	ACCESS_SECRET = d["access_secret"]
-
-	auth = tweepy.OAuthHandler(COM_KEY, COM_SECRET)
-	auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
-	api = tweepy.API(auth)
-
-	print("OAuthed")
-
-	#I really suggest not changing the encoding especially if nonASCII characters are to be expected from the source
-	#This is facebook so highly likely
-	with open(data["tweets"], 'r', encoding='utf-8') as f:
-		#starts tweeting from the bottom of the json file
-		#assuming bottom is earliest posts going to most recent at top
-		for message in reversed(tweets['data']):
-			try:
-				#tweets everything if censorBypass isn't false
-				message = message['message']
-				length = len(message)
-				if censorBypass:
-					#280 character limit is pretty hardlocked for now, that's why I'm comfortable leaving this as a magic number
-					if length <= 280:
-						#tweet(api, message, tweetDelay)
-						print(message, "\n######")
-						pass
-					record.add(message, len(message),autolog, false)
-					continue
-				#tweets only those not caught by the censor
-				censorTweet = censored(censor, message.lower())
-				if not censorTweet:
-					if length <= 280:
-						#tweet(api, message, tweetDelay)
-						print(message, "\n######")
-						pass
-				record.add(message, len(message), autolog, censorTweet)
-			except KeyError as e:
-				record.add("KeyError: entry missing "+ str(e))
-				continue
-	f.close()
-
-	for item in record.getLog():
-		#print(str(item))
-		pass
-
+def tweetBot(tweetDelay, jsonContents, loggingObj, autolog = True, censorBypass = True):
+	tb = botClass.TweetBot(jsonContents, loggingObj)
+	tb.startBot(loggingObj)
 
 def censored(pfile, pstring):
 	with open(pfile, 'r') as f:
@@ -75,7 +17,7 @@ def censored(pfile, pstring):
 
 def tweet(ptweetAPI, pmessage, ptweetDelay):
 	ptweetAPI.update_status(pmessage)
-	print("Tweeted")
+	print("Tweeted: " + pmessage)
 	time.sleep(ptweetDelay)
 
 if __name__ == '__main__':
@@ -91,7 +33,7 @@ if __name__ == '__main__':
 		j = jsonloader.loadHjson(defaultPath)
 		record.add(defaultPath + " opened")
 
-	tweetBot(1800, j, True)	
+	tweetBot(1800, j, record, True)	
 
 	#Should I function this out? ¯\_(ツ)_/¯
 	with open(j["files"]["logging"], "w+", encoding='utf-8') as f:

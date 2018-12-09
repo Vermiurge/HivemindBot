@@ -9,7 +9,7 @@ def loadJson(filename, encoding='utf-8'):
 			data = f.read()
 		f.close()
 	except FileNotFoundError as e:
-		print(e)
+		print(e + ": " + filename)
 		return None
 	return json.loads(data)
 
