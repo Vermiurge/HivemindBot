@@ -4,14 +4,11 @@ setup.bat
 data/4AM.json
 data/badwords.txt
 data/auth.json
-
 data/auth.hjson
-
 data/log.txt
 data/facebooklog.txt
 .vscode/launch.json
 .vscode/settings.json
 custompackages/logging.pyc
-custompackages/__pycache__/botClass.cpython-36.pyc
+custompackages/__pycache__/
 custompackages/jsonloader.pyc
-custompackages/__pycache__/jsonloader.cpython-36.pyc
