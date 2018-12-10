@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-import requests, json, sys, urllib
+import json
+import sys
+import urllib
+
+import requests
+
 from custompackages import jsonloader, logging
 
+
 def facebookScrape(jsonContents):
-	
 	try:
 		auth = jsonContents['auth']
 		files = jsonContents['files']
@@ -43,17 +49,19 @@ def facebookScrape(jsonContents):
 
 	#if its gotten this far, we can assume its a proper page json
 	writeResponseToFile(file=file, key="data",url=url_complete, key2="paging", value="next")
+	return
 
 def getToken(pAppID, pAppSecret):
-  response = urllib.request.urlopen('https://graph.facebook.com/oauth/access_token?client_id=' +
-    pAppID + '&client_secret=' + pAppSecret +
-    '&grant_type=client_credentials')
-  
-  if response.getcode() == 200:
-  	response = json.loads(response.read().decode('utf-8'))
-  	return response["access_token"]
-  else:
-  	return None
+	'This will be useful eventually but not right now'
+	response = urllib.request.urlopen('https://graph.facebook.com/oauth/access_token?client_id='+
+		pAppID + '&client_secret=' +
+		pAppSecret +'&grant_type=client_credentials'
+	)
+	if response.getcode() == 200:
+  		response = json.loads(response.read().decode('utf-8'))
+  		return response["access_token"]
+	else:
+  		return None
 
 def writeResponseToFile(file, key, url, **kwargs):
 	with open(file, 'w+', encoding='utf-8') as f:
@@ -69,7 +77,7 @@ def writeResponseToFile(file, key, url, **kwargs):
 				try:
 					f.write(json.dumps(message, indent=True, ensure_ascii=False) + 
 						(",", "")[i==len(json_string[key]) and kwargs['value'] not in json_string[kwargs['key2']]]
-						#quick list that checks if this message is infact the last possible entry, therefore omits the comma
+						#quick list that checks if this message is in-fact the last possible entry, therefore omits the comma
 						#TODO: This bit of code here basically makes it not usable with anything but facebook GRAPH jsons
 						#a bit more generic but still makes the assumption that there's going to be a second set of keys and values to check against
 					)
@@ -102,12 +110,6 @@ if __name__ == '__main__':
 
 	facebookScrape(j)
 
-	#Should I function this out? ¯\_(ツ)_/¯
-	with open(j["files"]["logging"].replace("log", "facebooklog"), "w+", encoding='utf-8') as f:
-		f.write(str(record.getLog()[0]) + "\n")
-		for item in record.getLog()[1:]:
-			f.write("\t" + str(item) + '\n')
-		f.write("Logging Closed")
-		f.close()
+	record.writeToFile(j["files"]["logging"].replace("log","facebooklog"))
 
 	exit()
