@@ -8,20 +8,21 @@ class TweetBot:
 	def __init__(self, jsonData, delay = 60 * 60 / 2, autolog = True, censorBypass = False):
 		auth = t.OAuthHandler(jsonData["auth"]["com_key"], jsonData["auth"]["com_secret"])
 		auth.set_access_token(jsonData["auth"]["access_key"], jsonData["auth"]["access_secret"])
+		self.jsonData = jsonData
 		self.delay = delay
 		self.autolog = autolog
 		self.censorBypass = censorBypass
 		self.api = t.API(auth)
 		self.encoding =  'utf-8'
-		self.tweets = jsonloader.loadJson(jsonData["files"]["tweets"])
-		with open(jsonData["files"]["censor"]) as myFile:
+		self.tweets = jsonloader.loadJson(self.jsonData["files"]["tweets"])
+		with open(self.jsonData["files"]["censor"]) as myFile:
 			self.censor = []
 			for word in myFile:
 				self.censor.append(word.replace("\n",""))
 		myFile.close() 
 
 	def __repr__(self):
-		return "TweetBot(%s,%s,%s,%s)" % (self.jsonData.__repr__(), self.delay, self.autolog, self.censorBypass)
+		return "TweetBot(%s,%s,%s,%s)" % (self.jsonData, self.delay, self.autolog, self.censorBypass)
 
 	def setEncoding(self, encoding):
 		self.encoding = encoding

@@ -5,7 +5,8 @@ from custompackages import jsonloader, botClass, logging
 
 def tweetBot(tweetDelay, jsonContents, loggingObj, autolog = True, censorBypass = True):
 	tb = botClass.TweetBot(jsonContents, loggingObj)
-	tb.startBot(loggingObj)
+	print(tb.__repr__())
+	#tb.startBot(loggingObj)
 
 def censored(pfile, pstring):
 	with open(pfile, 'r') as f:
@@ -42,5 +43,4 @@ if __name__ == '__main__':
 			f.write("\t" + str(item) + '\n')
 		f.write("Logging Closed")
 		f.close()
-
 	exit()

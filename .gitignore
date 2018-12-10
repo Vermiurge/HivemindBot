@@ -7,7 +7,10 @@ data/auth.json
 data/auth.hjson
 data/log.txt
 data/facebooklog.txt
-.vscode/launch.json
-.vscode/settings.json
+.vscode
 custompackages/logging.pyc
 custompackages/jsonloader.pyc
+custompackages/__pycache__/__init__.cpython-36.pyc
+custompackages/__pycache__/botClass.cpython-36.pyc
+custompackages/__pycache__/jsonloader.cpython-36.pyc
+custompackages/__pycache__/logging.cpython-36.pyc
