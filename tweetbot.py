@@ -3,24 +3,6 @@
 import tweepy, time, sys
 from custompackages import jsonloader, botClass, logging
 
-def tweetBot(tweetDelay, jsonContents, loggingObj, autolog = True, censorBypass = True):
-	tb = botClass.TweetBot(jsonContents, loggingObj)
-	print(tb.__repr__())
-	#tb.startBot(loggingObj)
-
-def censored(pfile, pstring):
-	with open(pfile, 'r') as f:
-		for word in f:
-			if word.replace("\n", "") in pstring:
-				return True
-	f.close()
-	return False
-
-def tweet(ptweetAPI, pmessage, ptweetDelay):
-	ptweetAPI.update_status(pmessage)
-	print("Tweeted: " + pmessage)
-	time.sleep(ptweetDelay)
-
 if __name__ == '__main__':
 	#WARNING: Make sure you change the file name here to the correct one
 	#Set the time delay between tweets in seconds
@@ -34,13 +16,8 @@ if __name__ == '__main__':
 		j = jsonloader.loadHjson(defaultPath)
 		record.add(defaultPath + " opened")
 
-	tweetBot(1800, j, record, True)	
+	botClass.TweetBot(j, 60*60/2, True).startBot(record)
 
-	#Should I function this out? ¯\_(ツ)_/¯
-	with open(j["files"]["logging"], "w+", encoding='utf-8') as f:
-		f.write(str(record.getLog()[0]) + "\n")
-		for item in record.getLog()[1:]:
-			f.write("\t" + str(item) + '\n')
-		f.write("Logging Closed")
-		f.close()
-	exit()
+	record.writeToFile(j["files"]["logging"])
+
+	sys.exit()

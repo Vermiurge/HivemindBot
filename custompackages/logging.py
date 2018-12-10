@@ -28,7 +28,7 @@ class logEntryTimestamped(logBaseEntry):
 		return "logEntryTimestamped(\"%s\", %s)" % (self.message, self.logtime)
 	
 class logEntryPost(logEntryTimestamped):
-	logEntryTimestamped.timeFormat = "%H:%M:%S %a %d-%m-%y"
+	logEntryTimestamped.timeFormat = "%H:%M:%S %a %m-%d-%y"
 	def __init__(self, pMessage, pCharacters, pTime = None, pCensor = False):
 		super().__init__(pMessage, pTime)
 		self.censored = pCensor
@@ -55,3 +55,11 @@ class log:
 		else:
 			self.logstack.append(logBaseEntry(pMessage))
 			return
+	
+	def writeToFile(self, fileName):
+		with open(fileName, "w+", encoding='utf-8') as f:
+			f.write(str(self.getLog()[0]) + "\n")
+			for item in self.getLog()[1:]:
+				f.write("\t" + str(item) + '\n')
+			f.write("Logging Closed")
+		f.close()
