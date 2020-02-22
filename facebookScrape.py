@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import json
-import sys
-import urllib
-
+import json, sys, urllib
 import requests
 
 from custompackages import jsonloader, logging
-
 
 def facebookScrape(jsonContents):
 	try:
@@ -29,7 +25,7 @@ def facebookScrape(jsonContents):
 	
 	file = files['tweets']
 	
-	url_complete = "https://graph.facebook.com/v3.0/" + page_id + "/posts?access_token=" + access_token
+	url_complete = "https://graph.facebook.com/v6.0/" + page_id + "/posts?access_token=" + access_token
 
 	#prints the full URL for your convenience in the console if you want to follow or confirm the GRAPH response yourself
 	print(url_complete)
@@ -66,7 +62,6 @@ def getToken(pAppID, pAppSecret):
 def writeResponseToFile(file, key, url, **kwargs):
 	with open(file, 'w+', encoding='utf-8') as f:
 		f.write("{\n\t\"" + key +"\": [\n")
-		
 		while  url != "":
 			reply = requests.get(url)
 			json_string = reply.json()
@@ -99,10 +94,10 @@ def writeResponseToFile(file, key, url, **kwargs):
 if __name__ == '__main__':
 	#WARNING: Change this to the correct file path before running
 	record = logging.log()
-	defaultPath = "data/auth.hjson"
+	defaultPath = "data/auth.json"
 
 	try:
-		j = jsonloader.loadHjson(sys.argv[1])
+		j = jsonloader.loadJson(sys.argv[1])
 		record.add(str(sys.argv[1]) + " opened")
 	except IndexError as e:
 		j = jsonloader.loadHjson(defaultPath)
@@ -110,6 +105,7 @@ if __name__ == '__main__':
 
 	facebookScrape(j)
 
+	#A bit hacky but this ensures that it always saves the facebook log in the same place as the regular log
 	record.writeToFile(j["files"]["logging"].replace("log","facebooklog"))
 
 	exit()

@@ -42,7 +42,7 @@ class logEntryPost(logEntryTimestamped):
 class log:
 	def __init__(self):
 		self.logstack = []
-		self.logstack.append(logBaseEntry("-------Logging Started-------"))
+		self.logstack.append(logBaseEntry("-------\tLogging Started\t-------"))
 	def getLog(self):
 		return self.logstack
 	def add(self, pMessage, pCharacters =  None, pTime = None, pCensor = None):
@@ -61,5 +61,5 @@ class log:
 			f.write(str(self.getLog()[0]) + "\n")
 			for item in self.getLog()[1:]:
 				f.write("\t" + str(item) + '\n')
-			f.write("Logging Closed")
+			f.write("-------\tLogging Closed\t-------")
 		f.close()
